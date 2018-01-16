@@ -22,29 +22,29 @@ unsigned char r = 0, g = 0, b = 0;
 
 void ledR(int ledState) {
     if (ledState == LED_OFF) {
-        r = 0;
+        r = LED_OFF;
         PORTCbits.RC5 = 0;
     } else {
-        r = 1;
+        r = LED_ON;
         PORTCbits.RC5 = 1;
     }
 }
 void ledG(int ledState) {
     if (ledState == LED_OFF) {
-        g = 0;
+        g = LED_OFF;
         PORTCbits.RC3 = 0;
     } else {
-        g = 1;
+        g = LED_ON;
         PORTCbits.RC3 = 1;
     }
 }
 
 void ledB(int ledState) {
     if (ledState == LED_OFF) {
-        b = 0;
+        b = LED_OFF;
         PORTCbits.RC6 = 0;
     } else {
-        b = 1;
+        b = LED_ON;
         PORTCbits.RC6 = 1;
     }
 }
@@ -54,14 +54,23 @@ void ledRGB(unsigned char data) {
     // red
     if ((data & 0b0100) != 0) {
         portC = portC | 0b00100000;
+        r = LED_ON;
+    } else {
+        r = LED_OFF;
     }
     // green
     if ((data & 0b0010) != 0) {
         portC = portC | 0b0001000;
+        g = LED_ON;
+    } else {
+        g = LED_OFF;
     }
     // blue
     if ((data & 0b0001) != 0) {
         portC = portC | 0b01000000;
+        b = LED_ON;
+    } else {
+        b = LED_OFF;
     }
     PORTC = portC;
 }
@@ -90,9 +99,9 @@ void setI2CWriteChar(unsigned char address) {
         case 0x00:
         {
             unsigned char data = 0;
-            if (r != 0) { data = data | 0b0100; }
-            if (g != 0) { data = data | 0b0010; }
-            if (b != 0) { data = data | 0b0001; }
+            if (r != LED_OFF) data |= 0b0100;
+            if (g != LED_OFF) data |= 0b0010;
+            if (b != LED_OFF) data |= 0b0001;
             I2CWriteChar = data;
             return;
         }
