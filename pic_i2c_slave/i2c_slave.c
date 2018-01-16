@@ -43,8 +43,6 @@ void I2CWrite(unsigned char data) {
         SSP1CON1bits.CKP = 1;    // Release the SCL line
 }
 
-#define RXBUFFER_SIZE 255
-
 volatile unsigned char RXBufferIndex = 0;
 
 #define STATE1 0b00001001 // 0x09 master write last was address
@@ -52,6 +50,12 @@ volatile unsigned char RXBufferIndex = 0;
 #define STATE3 0b00001101 // 0x0d master read last was address
 #define STATE4 0b00101100 // 0x2c master write last was data
 #define STATE5 0b00101000 // 0x28
+
+void countUpRXBufferIndex() {
+    RXBufferIndex ++;
+    if (RXBufferIndex >= RXBUFFER_SIZE)
+        RXBufferIndex = 0;
+}
 
 void checkStateAndManageI2c() {
     static char DAStatus = 0;
@@ -81,9 +85,7 @@ void checkStateAndManageI2c() {
                 DAStatus = 2;
             } else {
                 onI2CReceiveCallback(RXBufferIndex, value);
-                RXBufferIndex ++;
-                if (RXBufferIndex >= RXBUFFER_SIZE)
-                    RXBufferIndex = 0;
+                countUpRXBufferIndex();
             }
 
             if (SSP1CON2bits.SEN)
@@ -95,17 +97,13 @@ void checkStateAndManageI2c() {
 
             setI2CWriteCharCallback(RXBufferIndex);
             I2CWrite(I2CWriteChar);
-            RXBufferIndex ++;
-            if (RXBufferIndex >= RXBUFFER_SIZE)
-                RXBufferIndex = 0;
+            countUpRXBufferIndex();
             break;
 
         case STATE4:
             setI2CWriteCharCallback(RXBufferIndex);
             I2CWrite(I2CWriteChar);
-            RXBufferIndex ++;
-            if (RXBufferIndex >= RXBUFFER_SIZE)
-                RXBufferIndex = 0;
+            countUpRXBufferIndex();
             break;
 
         case STATE5:

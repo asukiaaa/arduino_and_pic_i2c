@@ -7,6 +7,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define RXBUFFER_SIZE 255
+
 void setupI2CSlave(short address);
 void interrupt I2Cinterrupt();
 
