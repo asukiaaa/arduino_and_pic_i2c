@@ -20,6 +20,7 @@
 
 unsigned char r = 0, g = 0, b = 0;
 
+// Unstable
 void ledR(int ledState) {
     if (ledState == LED_OFF) {
         r = LED_OFF;
@@ -29,6 +30,8 @@ void ledR(int ledState) {
         PORTCbits.RC5 = 1;
     }
 }
+
+// Unstable
 void ledG(int ledState) {
     if (ledState == LED_OFF) {
         g = LED_OFF;
@@ -39,6 +42,7 @@ void ledG(int ledState) {
     }
 }
 
+// Unstable
 void ledB(int ledState) {
     if (ledState == LED_OFF) {
         b = LED_OFF;
@@ -49,6 +53,7 @@ void ledB(int ledState) {
     }
 }
 
+// Stable: recommended to use this
 void ledRGB(unsigned char data) {
     unsigned char portC = 0;
     // red
