@@ -6,6 +6,7 @@ I2C example project with using Arduino and PIC.
 - [PIC16F1829](http://akizukidenshi.com/catalog/g/gI-06232/)
 
 # References
+- [PIC16F1829をI2Cスレーブとして動かして、Arduinoからの信号でLチカする方法](http://asukiaaa.blogspot.com/2018/01/pic16f1829i2carduinol.html)
 - [PICをI2Cスレーブとする](http://kimamanilab.cocolog-nifty.com/blog/2016/05/pici2c-5dbb.html)
 - [PIC16LF1503 as I2C slave in XC8](http://www.microchip.com/forums/m677165.aspx)
 - [Microchip Debugging](http://microchipdeveloper.com/mplabx:debugging)
