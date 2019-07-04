@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Wire.h>
 
 #define I2C_SLAVE_ADDRESS 0x10
