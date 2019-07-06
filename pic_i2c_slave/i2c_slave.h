@@ -12,8 +12,8 @@ extern "C" {
 void setupI2CSlave(short address);
 void __interrupt() I2Cinterrupt();
 
-int (*onI2CReceiveCallback)(unsigned char address, unsigned char data);
-int (*setI2CWriteCharCallback)(unsigned char address);
+void onI2CReceiveCallback(unsigned char address, unsigned char data);
+void setI2CWriteCharCallback(unsigned char address);
 unsigned char I2CWriteChar;
 
 #ifdef	__cplusplus

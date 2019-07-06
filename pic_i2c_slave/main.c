@@ -78,7 +78,7 @@ void ledRGB(unsigned char data) {
     LATC = portC;
 }
 
-void onI2CReceive(unsigned char address, unsigned char data) {
+void onI2CReceiveCallback(unsigned char address, unsigned char data) {
     switch (address) {
         case 0x00:
             ledRGB(data);
@@ -97,7 +97,7 @@ void onI2CReceive(unsigned char address, unsigned char data) {
     }
 }
 
-void setI2CWriteChar(unsigned char address) {
+void setI2CWriteCharCallback(unsigned char address) {
     switch (address) {
         case 0x00:
         {
@@ -128,10 +128,6 @@ void main(void) {
     OSCCONbits.SCS = 0b11; // Use internal oscillator as system clock
     TRISC = 0x00;
     LATC = 0x00;
-
-    // Set callbacks
-    onI2CReceiveCallback = onI2CReceive;
-    setI2CWriteCharCallback = setI2CWriteChar;
 
     // Start as I2C slave
     setupI2CSlave(I2C_ADDRESS);
