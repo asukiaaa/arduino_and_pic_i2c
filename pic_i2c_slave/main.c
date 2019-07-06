@@ -18,16 +18,16 @@
 #pragma config CP = OFF
 #pragma config FOSC = INTOSC // Use internal oscillator
 
-unsigned char r = 0, g = 0, b = 0;
+unsigned char r = LED_OFF, g = LED_OFF, b = LED_OFF;
 
 // Unstable
 void ledR(int ledState) {
     if (ledState == LED_OFF) {
         r = LED_OFF;
-        PORTCbits.RC5 = 0;
+        LATCbits.LATC5 = 0;
     } else {
         r = LED_ON;
-        PORTCbits.RC5 = 1;
+        LATCbits.LATC5 = 1;
     }
 }
 
@@ -35,10 +35,10 @@ void ledR(int ledState) {
 void ledG(int ledState) {
     if (ledState == LED_OFF) {
         g = LED_OFF;
-        PORTCbits.RC3 = 0;
+        LATCbits.LATC3 = 0;
     } else {
         g = LED_ON;
-        PORTCbits.RC3 = 1;
+        LATCbits.LATC3 = 1;
     }
 }
 
@@ -46,10 +46,10 @@ void ledG(int ledState) {
 void ledB(int ledState) {
     if (ledState == LED_OFF) {
         b = LED_OFF;
-        PORTCbits.RC6 = 0;
+        LATCbits.LATC6 = 0;
     } else {
         b = LED_ON;
-        PORTCbits.RC6 = 1;
+        LATCbits.LATC6 = 1;
     }
 }
 
@@ -77,7 +77,7 @@ void ledRGB(unsigned char data) {
     } else {
         b = LED_OFF;
     }
-    PORTC = portC;
+    LATC = portC;
 }
 
 void onI2CReceive(unsigned char address, unsigned char data) {
@@ -129,7 +129,7 @@ void main(void) {
     OSCCONbits.IRCF = 0b1111; // 16MHz
     OSCCONbits.SCS = 0b11; // Use internal oscillator as system clock
     TRISC = 0x00;
-    PORTC = 0x00;
+    LATC = 0x00;
 
     // Set callbacks
     onI2CReceiveCallback = onI2CReceive;
