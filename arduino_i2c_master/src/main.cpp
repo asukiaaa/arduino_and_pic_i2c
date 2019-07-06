@@ -13,25 +13,27 @@ void setup() {
   delay(500);
 }
 
-void writeByte(char deviceAddress, char bufferAddress, char data) {
+uint8_t writeByte(char deviceAddress, char bufferAddress, char data) {
   Wire.beginTransmission(deviceAddress);
   Wire.write(bufferAddress);
   Wire.write(data);
-  Wire.endTransmission();
+  return Wire.endTransmission();
 }
 
-void read3bytesState() {
+uint8_t read3bytesState() {
   Wire.beginTransmission(I2C_SLAVE_ADDRESS);
   Wire.write(R_ADDRESS);
-  Wire.endTransmission();
+  uint8_t result = Wire.endTransmission();
+  if (result != 0) return result;
   Wire.requestFrom(I2C_SLAVE_ADDRESS, 3);
   delay(10);
-  Serial.print("read: ");
+  Serial.print("read:");
   while (Wire.available()) {
-    Serial.print(Wire.read(), HEX);
     Serial.print(" ");
+    Serial.print(Wire.read(), HEX);
   }
   Serial.println("");
+  return 0;
 }
 
 void read1byteState() {
@@ -47,52 +49,61 @@ void read1byteState() {
   Serial.println("");
 }
 
+void writeAndReadResults(char deviceAddress, char bufferAddress, char data) {
+  if (writeByte(deviceAddress, bufferAddress, data) != 0) {
+    Serial.println("Failed to write");
+  } else {
+    read3bytesState();
+    read1byteState();
+  }
+}
+
 void loop() {
   Serial.println("turn R on");
-  writeByte(I2C_SLAVE_ADDRESS, R_ADDRESS, 1);
-  read3bytesState();
-  read1byteState();
+  writeAndReadResults(I2C_SLAVE_ADDRESS, R_ADDRESS, 1);
   delay(1000);
 
   Serial.println("turn G on");
-  writeByte(I2C_SLAVE_ADDRESS, G_ADDRESS, 1);
-  read3bytesState();
-  read1byteState();
+  writeAndReadResults(I2C_SLAVE_ADDRESS, G_ADDRESS, 1);
   delay(1000);
 
   Serial.println("turn B on");
-  writeByte(I2C_SLAVE_ADDRESS, B_ADDRESS, 1);
-  read3bytesState();
-  read1byteState();
+  writeAndReadResults(I2C_SLAVE_ADDRESS, B_ADDRESS, 1);
   delay(1000);
 
   Serial.println("turn R off");
-  writeByte(I2C_SLAVE_ADDRESS, R_ADDRESS, 0);
-  read3bytesState();
-  read1byteState();
+  writeAndReadResults(I2C_SLAVE_ADDRESS, R_ADDRESS, 0);
   delay(1000);
 
-  Serial.println("R:on,  G:on,  B:on");
-  writeByte(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b111);
-  read3bytesState();
-  read1byteState();
+  Serial.println("turn G off");
+  writeAndReadResults(I2C_SLAVE_ADDRESS, G_ADDRESS, 0);
+  delay(1000);
+
+  Serial.println("turn B off");
+  writeAndReadResults(I2C_SLAVE_ADDRESS, B_ADDRESS, 0);
+  delay(1000);
+
+  Serial.println("R:off,  G:off,  B:on");
+  writeAndReadResults(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b001);
   delay(1000);
 
   Serial.println("R:off, G:on,  B:on");
-  writeByte(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b011);
-  read3bytesState();
-  read1byteState();
+  writeAndReadResults(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b011);
   delay(1000);
 
-  Serial.println("R:off, G:off, B:on");
-  writeByte(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b001);
-  read3bytesState();
-  read1byteState();
+  Serial.println("R:on,  G:on,  B:on");
+  writeAndReadResults(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b111);
+  delay(1000);
+
+  Serial.println("R:on, G:on,  B:off");
+  writeAndReadResults(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b110);
+  delay(1000);
+
+  Serial.println("R:on, G:off, B:off");
+  writeAndReadResults(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0b100);
   delay(1000);
 
   Serial.println("R:off, G:off, B:off");
-  writeByte(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0);
-  read3bytesState();
-  read1byteState();
+  writeAndReadResults(I2C_SLAVE_ADDRESS, RGB_ADDRESS, 0);
   delay(1000);
 }
