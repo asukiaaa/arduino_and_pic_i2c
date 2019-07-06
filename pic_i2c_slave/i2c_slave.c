@@ -115,7 +115,7 @@ void checkStateAndManageI2c() {
     } // End switch (i2cStatus)
 }
 
-void interrupt I2Cinterrupt() {
+void __interrupt() I2Cinterrupt() {
     if (SSP1IF) {
         SSP1IF = 0; // Clear interrupt flag
         checkStateAndManageI2c();

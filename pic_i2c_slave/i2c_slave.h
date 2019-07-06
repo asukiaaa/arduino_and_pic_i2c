@@ -10,7 +10,7 @@ extern "C" {
 #define RXBUFFER_SIZE 255
 
 void setupI2CSlave(short address);
-void interrupt I2Cinterrupt();
+void __interrupt() I2Cinterrupt();
 
 int (*onI2CReceiveCallback)(unsigned char address, unsigned char data);
 int (*setI2CWriteCharCallback)(unsigned char address);
