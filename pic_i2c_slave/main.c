@@ -13,10 +13,8 @@
 #define _XTAL_FREQ 16000000
 #define LED_ON 1
 #define LED_OFF 0
-#pragma config WDTE = OFF
-#pragma config PWRTE = OFF
-#pragma config CP = OFF
-#pragma config FOSC = INTOSC // Use internal oscillator
+#pragma config FOSC=INTOSC, WDTE=OFF, PWRTE=OFF, MCLRE=OFF, CP=OFF, CPD=OFF, BOREN=ON, CLKOUTEN=OFF, IESO=OFF, FCMEN=OFF
+#pragma config WRT=OFF, PLLEN=OFF, STVREN=OFF, LVP=OFF
 
 unsigned char r = LED_OFF, g = LED_OFF, b = LED_OFF;
 
